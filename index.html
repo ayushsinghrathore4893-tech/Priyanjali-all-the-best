@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Priyanjali | Universal Luck</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&family=Playfair+Display:italic&display=swap');
+
+        :root {
+            --stellar-blue: #00d2ff;
+            --victory-gold: #f6d365;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Prevents pull-to-refresh on mobile chrome */
+            overscroll-behavior-y: contain;
+        }
+
+        #universe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: var(--opacity);
+            animation: drift var(--duration) linear infinite;
+        }
+
+        @keyframes drift {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100vh); }
+        }
+
+        /* Responsive Glass Portal */
+        .glass-portal {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            width: 85%;
+            max-width: 400px;
+            box-shadow: 0 0 50px rgba(0, 210, 255, 0.1);
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+
+        .system-status {
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--stellar-blue);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 10vw, 3rem);
+            margin: 0;
+            background: linear-gradient(to right, #fff, var(--stellar-blue), var(--victory-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        .universe-quote {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 4.5vw, 1.2rem);
+            line-height: 1.5;
+            margin: 1.5rem 0;
+            color: #e0e0e0;
+        }
+
+        .power-button {
+            background: none;
+            border: none;
+            font-size: 60px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.4));
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .power-button:active {
+            transform: scale(0.85);
+        }
+
+        .action-text {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--victory-gold);
+            font-weight: bold;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .highlight {
+            color: #fff;
+            text-decoration: underline dotted var(--stellar-blue);
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-height: 600px) {
+            .glass-portal { padding: 1.5rem; }
+            .universe-quote { margin: 0.8rem 0; }
+            .footer { margin-top: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="universe"></div>
+
+<div class="glass-portal" id="mainCard">
+    <div class="system-status">Cosmic Alignment: Optimized</div>
+    <h1>Priyanjali</h1>
+    
+    <div class="universe-quote">
+        "When you set your heart on a goal, the entire universe works in silence to pave the way for your success."
+    </div>
+
+    <button class="power-button" onclick="launchSuccess()">👍</button>
+    <span class="action-text">TAP FOR VICTORY</span>
+
+    <div class="footer">
+       ALL THE BEST FOR EXAM....
+    </div>
+</div>
+
+<script>
+    // Build the Stars
+    const universe = document.getElementById('universe');
+    const starCount = window.innerWidth < 600 ? 80 : 150; // Fewer stars on mobile for performance
+    
+    for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 2 + 1 + 'px';
+        star.style.width = size;
+        star.style.height = size;
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--opacity', Math.random());
+        star.style.setProperty('--duration', (Math.random() * 50 + 20) + 's');
+        universe.appendChild(star);
+    }
+
+    // Touch/Gyro Parallax for Mobile
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', (e) => {
+            const x = e.gamma / 3; // tilt left/right
+            const y = e.beta / 3;  // tilt forward/back
+            document.getElementById('mainCard').style.transform = `translate(${x}px, ${y}px)`;
+        });
+    }
+
+    function launchSuccess() {
+        const duration = 2 * 1000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 25, spread: 360, ticks: 50, zIndex: 999 };
+
+        const interval = setInterval(function() {
+          const timeLeft = animationEnd - Date.now();
+          if (timeLeft <= 0) return clearInterval(interval);
+
+          const particleCount = 40 * (timeLeft / duration);
+          confetti({ ...defaults, particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 }, colors: ['#00d2ff', '#f6d365', '#ffffff'] });
+        }, 200);
+
+        // Haptic feel vibration for mobile (if supported)
+        if (navigator.vibrate) navigator.vibrate(50);
+    }
+</script>
+
+</body>
+</html>
